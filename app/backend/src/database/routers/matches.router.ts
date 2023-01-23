@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import getListMatches from '../controllers/matchers.controller';
+import getSeachInProgressOrlistAll from '../controllers/matchers.controller';
 
 const matchersRouter = Router();
 
-matchersRouter.get('/matches', getListMatches);
+matchersRouter.get('/matches', getSeachInProgressOrlistAll);
 
 export default matchersRouter;
