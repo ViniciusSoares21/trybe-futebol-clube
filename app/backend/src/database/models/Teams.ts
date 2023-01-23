@@ -1,5 +1,5 @@
 import { Model, INTEGER, STRING } from 'sequelize';
-import Matchers from './Matchers';
+import Matches from './Matchers';
 import db from '.';
 
 class Teams extends Model {
@@ -24,7 +24,9 @@ Teams.init({
   timestamps: false,
 });
 
-Teams.hasMany(Matchers, { foreignKey: 'id', as: 'Matchers' });
-Matchers.belongsTo(Teams, { foreignKey: 'id', as: 'Teams' });
+Teams.hasMany(Matches, { foreignKey: 'id', as: 'homeMatchesId' });
+Matches.belongsTo(Teams, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+Teams.hasMany(Matches, { foreignKey: 'id', as: 'awayMatches' });
+Matches.belongsTo(Teams, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
 export default Teams;
