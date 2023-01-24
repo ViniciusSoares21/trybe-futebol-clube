@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as MatchersService from '../services/matches.service';
+import veryfyExistTeams from '../utils/verifyExitsTeames';
 
 const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
   try {
@@ -25,4 +26,35 @@ const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
   }
 };
 
-export default getSeachInProgressOrlistAll;
+const createMatches = async (req: Request, res: Response) => {
+  try {
+    if (req.body.homeTeamId === req.body.awayTeamId) {
+      return res.status(422).json({
+        message: 'It is not possible to create a match with two equal teams' });
+    }
+
+    const verifyTimes = await veryfyExistTeams([req.body.homeTeamId, req.body.awayTeamId]);
+
+    if (verifyTimes) {
+      return res.status(404).json({
+        message: 'There is no team with such id!' });
+    }
+    const newMatches = await MatchersService.createMatches(req.body);
+
+    return res.status(201).json(newMatches);
+  } catch (err:unknown) {
+    return res.status(500).json({ message: 'Erro interno', error: err });
+  }
+};
+
+const updateInProgress = async (req: Request, res: Response) => {
+  try {
+    const UpInProgress = await MatchersService.updateInProgress(req.params.id);
+
+    return res.status(200).json(UpInProgress);
+  } catch (err:unknown) {
+    return res.status(500).json({ message: 'Erro interno', error: err });
+  }
+};
+
+export { getSeachInProgressOrlistAll, createMatches, updateInProgress };
