@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import * as MatchersService from '../services/matches.service';
 import veryfyExistTeams from '../utils/verifyExitsTeames';
 
+const message:object = { message: 'Erro interno' };
+
 const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
   try {
     const { inProgress } = req.query;
@@ -22,7 +24,7 @@ const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
 
     return res.status(200).json(getInProgress);
   } catch (err:unknown) {
-    return res.status(500).json({ message: 'Erro interno', error: err });
+    return res.status(500).json({ message, error: err });
   }
 };
 
@@ -32,7 +34,7 @@ const updateMatchesGoals = async (req: Request, res: Response) => {
 
     return res.status(200).json({ updateGoals });
   } catch (err:unknown) {
-    return res.status(500).json({ message: 'Erro interno', error: err });
+    return res.status(500).json({ message, error: err });
   }
 };
 
@@ -53,7 +55,7 @@ const createMatches = async (req: Request, res: Response) => {
 
     return res.status(201).json(newMatches);
   } catch (err:unknown) {
-    return res.status(500).json({ message: 'Erro interno', error: err });
+    return res.status(500).json({ message, error: err });
   }
 };
 
@@ -63,7 +65,7 @@ const updateInProgress = async (req: Request, res: Response) => {
 
     return res.status(200).json(UpInProgress);
   } catch (err:unknown) {
-    return res.status(500).json({ message: 'Erro interno', error: err });
+    return res.status(500).json({ message, error: err });
   }
 };
 
