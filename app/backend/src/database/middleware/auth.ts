@@ -8,7 +8,7 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
   const token = req.header('Authorization');
 
   if (!token) {
-    return res.status(401).json({ message: 'Token not found' });
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
 
   try {
@@ -18,6 +18,6 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
 
     return next();
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
 }
