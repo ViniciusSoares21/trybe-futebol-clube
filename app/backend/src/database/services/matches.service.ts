@@ -1,3 +1,4 @@
+import IMatches from '../interfaces/matches';
 import Matches from '../models/Matchers';
 import Teams from '../models/Teams';
 
@@ -17,4 +18,22 @@ const getListMatches = async () => {
   return matches;
 };
 
-export { getListMatches, getSeachInProgress };
+const getTeamesById = async (id:string) => {
+  const teame = Matches.findOne({ where: { id } });
+
+  return teame;
+};
+
+const createMatches = async (matches:IMatches) => {
+  const newMatches = await Matches.create({ ...matches, inProgress: 1 });
+
+  return newMatches;
+};
+
+const updateInProgress = async (id:string) => {
+  await Matches.update({ inProgress: 0 }, { where: { id } });
+
+  return { message: 'Finished' };
+};
+
+export { getListMatches, getSeachInProgress, createMatches, updateInProgress, getTeamesById };
