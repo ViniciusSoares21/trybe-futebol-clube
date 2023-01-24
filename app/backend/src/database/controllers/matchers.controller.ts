@@ -26,6 +26,16 @@ const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
   }
 };
 
+const updateMatchesGoals = async (req: Request, res: Response) => {
+  try {
+    const updateGoals = await MatchersService.updateMatchesGoals(req.params.id, req.body);
+
+    return res.status(200).json({ updateGoals });
+  } catch (err:unknown) {
+    return res.status(500).json({ message: 'Erro interno', error: err });
+  }
+};
+
 const createMatches = async (req: Request, res: Response) => {
   try {
     if (req.body.homeTeamId === req.body.awayTeamId) {
@@ -57,4 +67,4 @@ const updateInProgress = async (req: Request, res: Response) => {
   }
 };
 
-export { getSeachInProgressOrlistAll, createMatches, updateInProgress };
+export { getSeachInProgressOrlistAll, createMatches, updateInProgress, updateMatchesGoals };
