@@ -1,6 +1,7 @@
 // import Matches from '../models/Matchers';
-import sequelize = require('sequelize');
-import Teams from '../models/Teams';
+// import sequelize = require('sequelize');
+import Model from '../models';
+// import Teams from '../models/Teams';
 
 const query = `SELECT T.team_name as name,
 SUM(CASE WHEN M.home_team_goals > M.away_team_goals THEN 3 
@@ -27,8 +28,7 @@ ORDER BY SUM(CASE WHEN M.home_team_goals > M.away_team_goals THEN 3
   SUM(M.away_team_goals) ASC;`;
 
 const getClassification = async () => {
-  const result = await Teams.findAll({ attributes: {
-    include: [[sequelize.literal(`(${query})`), 'laughReactionsCount']] } });
+  const [result] = await Model.query(query);
 
   return result;
 };
