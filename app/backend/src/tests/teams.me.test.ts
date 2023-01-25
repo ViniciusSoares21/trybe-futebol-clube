@@ -14,7 +14,7 @@ const { expect } = chai;
 describe('Teste endpoint /teams', () => {
   describe('Com Sucesso', () => {
     beforeEach(() => {
-      sinon.stub(TeamsService, 'getTeams').resolves(expectedResult as unknown as Teams[] );
+      sinon.stub(Teams, 'findAll').resolves(expectedResult as unknown as Teams[] );
     });
   
     afterEach(() => {
@@ -30,7 +30,7 @@ describe('Teste endpoint /teams', () => {
 
   describe('Com Erro', () => { 
     beforeEach(() => {
-      sinon.stub(TeamsService, 'getTeams').resolves();
+      sinon.stub(TeamsService, 'getTeams').throws();
     });
   
     afterEach(() => {
