@@ -13,8 +13,8 @@ SUM(CASE WHEN M.home_team_goals < M.away_team_goals THEN 1 ELSE 0 END ) as total
 SUM(M.home_team_goals) as goalsFavor, 
 SUM(M.away_team_goals) as goalsOwn,
 SUM(M.home_team_goals - M.away_team_goals) as goalsBalance,
-ROUND(SUM(CASE WHEN M.home_team_goals > M.away_team_goals THEN 3 
-  WHEN M.home_team_goals = M.away_team_goals THEN 1 ELSE 0 END) / (COUNT(T.id) * 3) * 100) 
+FORMAT(SUM(CASE WHEN M.home_team_goals > M.away_team_goals THEN 3 
+  WHEN M.home_team_goals = M.away_team_goals THEN 1 ELSE 0 END) / (COUNT(T.id) * 3) * 100, 2) 
   as efficiency
 FROM TRYBE_FUTEBOL_CLUBE.teams as T 
   INNER JOIN TRYBE_FUTEBOL_CLUBE.matches as M  ON T.id = M.home_team_id 
