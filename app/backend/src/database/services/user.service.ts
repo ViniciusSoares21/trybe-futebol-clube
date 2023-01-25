@@ -1,11 +1,18 @@
 import User from '../models/Users';
+import { IUser } from '../interfaces/user';
 
-const getByUserEmail = async (email:string) => {
+export const getByUserEmail = async (email:string) => {
   const user = await User.findOne({ where: { email } });
 
   return user;
 };
 
-const get = () => '';
+export default class UserService {
+  constructor(private userModel = User) {}
 
-export { getByUserEmail, get };
+  public async getByUserEmail(email:string): Promise<IUser | null> {
+    const user = await this.userModel.findOne({ where: { email } });
+
+    return user;
+  }
+}
