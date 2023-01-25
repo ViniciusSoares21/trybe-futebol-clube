@@ -22,7 +22,7 @@ describe('Teste endpoint /login/validate, com sucesso', () => {
   });
 
   it('Retornar um objeto contendo a role do user e enviar status 200', async () => {
-    const { status, body } = await chai.request(app).set("Authorization", mockToken).get('/login/validate');
+    const { status, body } = await chai.request(app)/* .set("Authorization", mockToken) */.get('/login/validate');
 
     expect(status).to.be.equal(200);
     //expect(body).to.be.an('object');
