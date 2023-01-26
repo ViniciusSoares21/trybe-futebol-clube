@@ -12,6 +12,9 @@ import { app } from '../app';
 chai.use(chaiHttp);
 const { expect } = chai;
 
+/* before(() => consoleLogStub.returns(true));
+after(() => consoleLogStub.restore()); */
+
 describe('Teste endpoint GET /leaderboard/home', () => {
   describe('Com Sucesso', () => {
     beforeEach(() => {
@@ -40,9 +43,11 @@ describe('Teste endpoint GET /leaderboard/home', () => {
     });
     it('Retornar um objetos contendo um erro e status 500', async () => {
       const { status, body } = await chai.request(app).get('/leaderboard/home');
-  
+      const message = {
+        message: "Erro interno"
+      }
       expect(status).to.be.equal(500);
-      expect(body).to.be.deep.equal({ message: 'Erro interno', error: {} });
+      expect(body).to.be.deep.equal({ message, error: {}});
     });
   });
 });
@@ -75,9 +80,11 @@ describe('Teste endpoint GET /leaderboard/away', () => {
     });
     it('Retornar um objetos contendo um erro e status 500', async () => {
       const { status, body } = await chai.request(app).get('/leaderboard/away');
-  
+      const message = {
+        message: "Erro interno"
+      }
       expect(status).to.be.equal(500);
-      expect(body).to.be.deep.equal({ message: 'Erro interno', error: {} });
+      expect(body).to.be.deep.equal({ message, error: {} });
     });
   });
 });
@@ -110,9 +117,11 @@ describe('Teste endpoint GET /leaderboard', () => {
     });
     it('Retornar um objetos contendo um erro e status 500', async () => {
       const { status, body } = await chai.request(app).get('/leaderboard');
-  
+      const message = {
+        message: "Erro interno"
+      }
       expect(status).to.be.equal(500);
-      expect(body).to.be.deep.equal({ message: 'Erro interno', error: {} });
+      expect(body).to.be.deep.equal({ message, error: {} });
     });
   });
 });
