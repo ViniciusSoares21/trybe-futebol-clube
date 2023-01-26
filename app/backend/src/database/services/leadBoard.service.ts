@@ -1,16 +1,17 @@
+import ITeams from '../interfaces/leaderboard';
 import Model from '../models';
 import { queryHome, queryAway } from '../utils/querys';
 
-const getClassificationHome = async () => {
+const getClassificationHome = async (): Promise<ITeams[]> => {
   const [result] = await Model.query(queryHome);
 
-  return result;
+  return result as ITeams[];
 };
 
-const getClassificationAway = async () => {
+const getClassificationAway = async (): Promise<ITeams[]> => {
   const [result] = await Model.query(queryAway);
 
-  return result;
+  return result as ITeams[];
 };
 
 // eslint-disable-next-line max-lines-per-function
@@ -18,13 +19,11 @@ const getClassification = async () => {
   const aways = await getClassificationAway();
   const homes = await getClassificationHome();
 
-  const leaderboard = homes.map((home:any) => {
-    const team = aways.find((away:any) => away.name === home.name) as any;
+  const leaderboard = homes.map((home) => {
+    const team = aways.find((away) => away.name === home.name) as ITeams;
 
     const Tpoints = Number(home.totalPoints) + Number(team.totalPoints);
     const Tgame = Number(home.totalGames) + Number(team.totalGames);
-
-    console.log(((Tpoints / (Tgame * 3)) * 100).toFixed(2));
 
     return {
       name: home.name,
