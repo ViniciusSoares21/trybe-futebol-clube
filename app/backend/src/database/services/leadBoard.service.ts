@@ -21,6 +21,11 @@ const getClassification = async () => {
   const leaderboard = homes.map((home:any) => {
     const team = aways.find((away:any) => away.name === home.name) as any;
 
+    const Tpoints = Number(home.totalPoints) + Number(team.totalPoints);
+    const Tgame = Number(home.totalGames) + Number(team.totalGames);
+
+    console.log(((Tpoints / (Tgame * 3)) * 100).toFixed(2));
+
     return {
       name: home.name,
       totalPoints: Number(home.totalPoints) + Number(team.totalPoints),
@@ -31,8 +36,7 @@ const getClassification = async () => {
       goalsFavor: Number(home.goalsFavor) + Number(team.goalsFavor),
       goalsOwn: Number(home.goalsOwn) + Number(team.goalsOwn),
       goalsBalance: Number(home.goalsBalance) + Number(team.goalsBalance),
-      efficiency: ((Number(home.totalPoints) + Number(team.totalPoints)
-      / (Number(home.totalGames) + Number(team.totalGames) * 3)) * 100).toFixed(2),
+      efficiency: ((Tpoints / (Tgame * 3)) * 100).toFixed(2),
     };
   });
 
