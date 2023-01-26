@@ -92,11 +92,12 @@ describe('Teste endpoint GET /leaderboard/away', () => {
 describe('Teste endpoint GET /leaderboard', () => {
   describe('Com Sucesso', () => {
     beforeEach(() => {
-      sinon.stub(leadBoardService, 'getClassification').resolves(resultTeamAwayAndHome as ITeams[]);
+      sinon.stub(leadBoardService, 'getClassificationAway').resolves(resultTeamHome as unknown as ITeams[]);
+      sinon.stub(leadBoardService, 'getClassificationHome').resolves(resultTeamAway as unknown as ITeams[]);
     });
   
     afterEach(() => {
-      (leadBoardService.getClassification as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar um array de objetos contendo todos os timesHome e enviar status 200', async () => {
       const { status, body } = await chai.request(app).get('/leaderboard');

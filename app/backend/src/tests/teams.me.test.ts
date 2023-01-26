@@ -53,7 +53,7 @@ describe('Teste endpoint /teams:id', () => {
     });
   
     afterEach(() => {
-      (TeamsService.getTeamsId as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar um objetos contendo o time correto e enviar status 200', async () => {
       const { status, body } = await chai.request(app).get('/teams/:id');

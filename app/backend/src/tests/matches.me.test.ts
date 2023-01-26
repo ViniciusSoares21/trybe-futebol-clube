@@ -18,7 +18,7 @@ describe('Teste endpoint GET /matches', () => {
     });
   
     afterEach(() => {
-      (MatchersService.getListMatches as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar um array de objetos contendo todos os matches e enviar status 200', async () => {
       const { status, body } = await chai.request(app).get('/matches');
@@ -39,24 +39,26 @@ describe('Teste endpoint GET /matches', () => {
     });
     it('Retornar um objetos contendo uma menssage de erro e enviar status 500', async () => {
       const { status, body } = await chai.request(app).get('/matches');
-  
+      const message = {
+        message: "Erro interno"
+      }
       expect(status).to.be.equal(500);
-      expect(body).to.be.deep.equal({ message: 'Erro interno', error: {} });
+      expect(body).to.be.deep.equal({ message, error: {} });
     });
   });
 });
 
-/* describe('Teste endpoint /matches?inProgress=true', () => {
+describe('Teste endpoint /matches?inProgress=true', () => {
   describe('com sucesso', () => {  
     afterEach(() => {
-      (MatchersService.getSeachInProgress as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar um array de objetos contendo o matches com partidas em andamento e enviar status 200', async () => {
       beforeEach(() => {
         sinon.stub(Matches, 'findAll').resolves(allMatchesInProgressTrue as unknown as Matches[] );
       });
 
-      const { status, body } = await chai.request(app).get('/matches').query('?inProgress=true');
+      const { status, body } = await chai.request(app).get('/matches').query({'inProgress': 'true'})
   
       expect(status).to.be.equal(200);
       expect(body).to.be.deep.equal(allMatchesInProgressTrue);
@@ -66,14 +68,14 @@ describe('Teste endpoint GET /matches', () => {
         sinon.stub(Matches, 'findAll').resolves(allMatchesInProgressFalse as unknown as Matches[] );
       });
       
-      const { status, body } = await chai.request(app).get('/matches').query('?inProgress=false');
+      const { status, body } = await chai.request(app).get('/matches?inProgress=false');
   
       expect(status).to.be.equal(200);
       expect(body).to.be.deep.equal(allMatchesInProgressFalse);
     });
   });
 });
- */
+
 
 describe('Teste endpoint PATCH /matches/:id/finish para alterar p inProgress de uma partida para false', () => {
   describe('Com Sucesso', () => {
@@ -82,7 +84,7 @@ describe('Teste endpoint PATCH /matches/:id/finish para alterar p inProgress de 
     });
   
     afterEach(() => {
-      (MatchersService.updateInProgress as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar uma menssagem "Finished" e enviar status 200', async () => {
       const { status, body } = await chai.request(app).patch('/matches/1/finish');
@@ -103,9 +105,11 @@ describe('Teste endpoint PATCH /matches/:id/finish para alterar p inProgress de 
     });
     it('Retornar um objetos contendo uma menssage de erro e enviar status 500', async () => {
       const { status, body } = await chai.request(app).patch('/matches/1/finish');
-  
+      const message = {
+        message: "Erro interno"
+      }
       expect(status).to.be.equal(500);
-      expect(body).to.be.deep.equal({ message: 'Erro interno', error: {} });
+      expect(body).to.be.deep.equal({ message, error: {} });
     });
   });
 });
