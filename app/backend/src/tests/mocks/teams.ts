@@ -65,4 +65,9 @@ const expectedResult = [
   }
 ];
 
-export { expectedResult }
+const expectedResultId = {
+  id: 5,
+  teamName: "Cruzeiro"
+}
+
+export { expectedResult, expectedResultId }
