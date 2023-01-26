@@ -18,13 +18,14 @@ after(() => consoleLogStub.restore()); */
 describe('Teste endpoint GET /leaderboard/home', () => {
   describe('Com Sucesso', () => {
     beforeEach(() => {
-      sinon.stub(Model, 'query').resolves(resultTeamHome as [unknown[], unknown] | undefined);
+     
     });
   
     afterEach(() => {
       (Model.query as sinon.SinonStub).restore();
     });
     it('Retornar um array de objetos contendo todos os timesHome e enviar status 200', async () => {
+      sinon.stub(Model, 'query').resolves([resultTeamHome, []]);
       const { status, body } = await chai.request(app).get('/leaderboard/home');
   
       expect(status).to.be.equal(200);
@@ -55,7 +56,7 @@ describe('Teste endpoint GET /leaderboard/home', () => {
 describe('Teste endpoint GET /leaderboard/away', () => {
   describe('Com Sucesso', () => {
     beforeEach(() => {
-      sinon.stub(Model, 'query').resolves(resultTeamAway as [unknown[], unknown] | undefined);
+      sinon.stub(Model, 'query').resolves([resultTeamAway, []]);
     });
   
     afterEach(() => {

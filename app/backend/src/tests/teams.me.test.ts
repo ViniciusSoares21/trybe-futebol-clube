@@ -18,7 +18,7 @@ describe('Teste endpoint /teams', () => {
     });
   
     afterEach(() => {
-      (TeamsService.getTeams as sinon.SinonStub).restore();
+      (sinon).restore();
     });
     it('Retornar um array de objetos contendo todos os times e enviar status 200', async () => {
       const { status, body } = await chai.request(app).get('/teams');
@@ -34,7 +34,7 @@ describe('Teste endpoint /teams', () => {
     });
   
     afterEach(() => {
-      (TeamsService.getTeams as sinon.SinonStub).restore();
+      (sinon).restore();
   
     });
     it('Retornar um array de objetos contendo todos os times e enviar status 200', async () => {

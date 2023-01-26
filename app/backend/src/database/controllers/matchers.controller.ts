@@ -32,7 +32,7 @@ const updateMatchesGoals = async (req: Request, res: Response) => {
   try {
     const updateGoals = await MatchersService.updateMatchesGoals(req.params.id, req.body);
 
-    return res.status(200).json({ updateGoals });
+    return res.status(200).json(updateGoals);
   } catch (err:unknown) {
     return res.status(500).json({ message, error: err });
   }
