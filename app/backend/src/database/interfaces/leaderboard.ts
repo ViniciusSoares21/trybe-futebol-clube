@@ -8,5 +8,5 @@ export default interface ITeams {
   goalsFavor: number;
   goalsOwn: number;
   goalsBalance: number;
-  efficiency: number;
+  efficiency: string;
 }
