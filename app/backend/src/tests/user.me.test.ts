@@ -18,7 +18,7 @@ describe('Teste endpoint /login/validate, com sucesso', () => {
   });
 
   it('Retornar um objeto contendo a role do user e enviar status 200', async () => {
-    sinon.stub(jsonwebtoken, 'verify').resolves({ email: 'admin@admin.com', password: 'secret_admin' });
+    sinon.stub(jsonwebtoken, 'verify').callsFake(() => { data: {email: 'admin@admin.com'}});
     sinon.stub(User, 'findOne').resolves(responseLoginVaid as unknown as User );
 
     const { status, body } = await chai.request(app).get('/login/validate')

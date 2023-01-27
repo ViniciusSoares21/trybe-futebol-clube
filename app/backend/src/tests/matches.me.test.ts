@@ -6,9 +6,12 @@ import chaiHttp = require('chai-http');
 import * as jsonwebtoken from 'jsonwebtoken';
 import { allMatches, allMatchesInProgressTrue, allMatchesInProgressFalse, 
   resultCreateMatches  } from './mocks/matches';
+import veryfyExistTeams from '../utils/verifyExitsTeames'; 
 import Matches from '../database/models/Matchers';
+import MatchesController from '../controllers/matchers.controller';
 import { app } from '../app';
 
+const controller = new MatchesController() 
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -161,7 +164,7 @@ describe('Teste endpoint POST /matches para salver uma partida', () => {
     });
   });
 
-  /* describe('Com Erro', () => {
+  describe('Com Erro', () => {
     afterEach(() => {
       sinon.restore();
     });
@@ -188,6 +191,29 @@ describe('Teste endpoint POST /matches para salver uma partida', () => {
       expect(status).to.be.equal(500);
       expect(body).to.be.deep.equal({ message, error: {} });
     });
-  }); */
+
+    /* it('Retornar um objetos contendo uma menssage de ERRO e enviar status 500', async () => {
+      sinon.stub(veryfyExistTeams.prototype, 'veryfyExistTeams').returns(true);
+      sinon.stub(jsonwebtoken, 'verify').resolves({ email: 'admin@admin.com', password: 'secret_admin' });
+
+      const mockToken = {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc'
+      }
+
+      const { status, body } = await chai.request(app).patch('/matches/1/finish').send(
+        {
+          "homeTeamId": 16,
+          "awayTeamId": 8, 
+          "homeTeamGoals": 2,
+          "awayTeamGoals": 2,
+        }).set("Authorization", mockToken.token);
+
+      const message = {
+        message: "Erro interno"
+      }
+      expect(status).to.be.equal(500);
+      expect(body).to.be.deep.equal({ message, error: {} });
+    }); */
+  });
 });
 

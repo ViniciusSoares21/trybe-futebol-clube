@@ -11,7 +11,9 @@ export default class UserController {
       const user = await this._UserService.getByUserEmail(data.email);
       return res.status(200).json({ role: user?.role });
     } catch (err:unknown) {
-      return res.status(500).json({ message: 'Erro interno', error: err });
+      console.log('**CONTROLE USER', err);
+
+      return res.status(500).json({ message: 'Erro interno', err });
     }
   };
 }
