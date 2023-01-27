@@ -1,37 +1,39 @@
 import { Request, Response } from 'express';
 
-import * as leadBoardService from '../services/leadBoard.service';
+import LeadBoardService from '../services/leadBoard.service';
 
 const message:object = { message: 'Erro interno' };
 
-const getClassificationHome = async (req:Request, res:Response) => {
-  try {
-    const teams = await leadBoardService.getClassificationHome();
+export default class LeadBoardController {
+  constructor(private _LeadBoardService = new LeadBoardService()) {}
 
-    return res.status(200).json(teams);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
+  public getClassificationHome = async (_req:Request, res:Response) => {
+    try {
+      const teams = await this._LeadBoardService.getClassificationHome();
 
-const getClassificationAway = async (req:Request, res:Response) => {
-  try {
-    const teams = await leadBoardService.getClassificationAway();
+      return res.status(200).json(teams);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
+    }
+  };
 
-    return res.status(200).json(teams);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
+  public getClassificationAway = async (_req:Request, res:Response) => {
+    try {
+      const teams = await this._LeadBoardService.getClassificationAway();
 
-const getClassification = async (req:Request, res:Response) => {
-  try {
-    const teams = await leadBoardService.getClassification();
+      return res.status(200).json(teams);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
+    }
+  };
 
-    return res.status(200).json(teams);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
+  public getClassification = async (_req:Request, res:Response) => {
+    try {
+      const teams = await this._LeadBoardService.getClassification();
 
-export { getClassificationHome, getClassificationAway, getClassification };
+      return res.status(200).json(teams);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
+    }
+  };
+}

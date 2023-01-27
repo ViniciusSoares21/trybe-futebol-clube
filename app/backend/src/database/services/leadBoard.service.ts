@@ -3,32 +3,34 @@ import Model from '../models';
 import { createObjetoTeams, sortObjetoTeams } from '../utils/createObjetoLeaderBoard';
 import { queryHome, queryAway } from '../utils/querys';
 
-const getClassificationHome = async (): Promise<ITeams[]> => {
-  const [result] = await Model.query(queryHome);
+export default class LeadBoardService {
+  constructor(private _Model = Model) {}
 
-  return result as ITeams[];
-};
+  public getClassificationHome = async (): Promise<ITeams[]> => {
+    const [result] = await this._Model.query(queryHome);
 
-const getClassificationAway = async (): Promise<ITeams[]> => {
-  const [result] = await Model.query(queryAway);
+    return result as ITeams[];
+  };
 
-  return result as ITeams[];
-};
+  public getClassificationAway = async (): Promise<ITeams[]> => {
+    const [result] = await this._Model.query(queryAway);
 
-const getClassification = async () => {
-  const aways = await getClassificationAway();
-  const homes = await getClassificationHome();
+    return result as ITeams[];
+  };
 
-  const leaderboard = homes.map((home) => {
-    const team = aways.find((away) => away.name === home.name) as ITeams;
+  public getClassification = async (): Promise<ITeams[]> => {
+    const aways = await this.getClassificationAway();
+    const homes = await this.getClassificationHome();
 
-    const Tpoints = Number(home.totalPoints) + Number(team.totalPoints);
-    const Tgame = Number(home.totalGames) + Number(team.totalGames);
+    const leaderboard = homes.map((home) => {
+      const team = aways.find((away) => away.name === home.name) as ITeams;
 
-    return createObjetoTeams(home, team, Tpoints, Tgame);
-  });
+      const Tpoints = Number(home.totalPoints) + Number(team.totalPoints);
+      const Tgame = Number(home.totalGames) + Number(team.totalGames);
 
-  return sortObjetoTeams(leaderboard);
-};
+      return createObjetoTeams(home, team, Tpoints, Tgame);
+    });
 
-export { getClassificationHome, getClassificationAway, getClassification };
+    return sortObjetoTeams(leaderboard);
+  };
+}

@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { getClassificationHome,
-  getClassificationAway, getClassification } from '../controllers/leadBoard.controller';
+import LeadBoardController from '../controllers/leadBoard.controller';
+
+const Controller = new LeadBoardController();
 
 const leadBoardRouter = Router();
 
-leadBoardRouter.get('/leaderboard/home', getClassificationHome);
+leadBoardRouter.get('/leaderboard/home', Controller.getClassificationHome);
 
-leadBoardRouter.get('/leaderboard/away', getClassificationAway);
+leadBoardRouter.get('/leaderboard/away', Controller.getClassificationAway);
 
-leadBoardRouter.get('/leaderboard', getClassification);
+leadBoardRouter.get('/leaderboard', Controller.getClassification);
 
 export default leadBoardRouter;
