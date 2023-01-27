@@ -13,18 +13,8 @@ const createObjetoTeams = (home:ITeams, team:ITeams, Tpoints:number, Tgame:numbe
   efficiency: ((Tpoints / (Tgame * 3)) * 100).toFixed(2),
 });
 
-const sortObjetoTeams = (array:ITeams[]) => array.sort((a, b) => {
-  if (b.totalPoints !== a.totalPoints) {
-    return b.totalPoints - a.totalPoints;
-  }
-  if (b.totalVictories !== a.totalVictories) {
-    return b.totalVictories - a.totalVictories;
-  } if (b.goalsBalance !== a.goalsBalance) {
-    return b.goalsBalance - a.goalsBalance;
-  } if (b.goalsFavor !== a.goalsFavor) {
-    return b.goalsFavor - a.goalsFavor;
-  }
-  return a.goalsOwn - b.goalsOwn;
-});
+const sortObjetoTeams = (array:ITeams[]) => array.sort((a, b) => b.totalPoints - a.totalPoints
+|| b.totalVictories - a.totalVictories || b.goalsBalance - a.goalsBalance
+|| b.goalsFavor - a.goalsFavor || a.goalsOwn - b.goalsOwn);
 
 export { createObjetoTeams, sortObjetoTeams };
