@@ -3,7 +3,6 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
-import * as TeamsService from '../database/services/teams.service';
 import { expectedResult, expectedResultId  } from './mocks/teams';
 import Teams from '../database/models/Teams';
 import { app } from '../app';
@@ -12,15 +11,13 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Teste endpoint /teams', () => {
+  afterEach(() => {
+    (sinon).restore();
+  });
+
   describe('Com Sucesso', () => {
-    beforeEach(() => {
-      sinon.stub(Teams, 'findAll').resolves(expectedResult as unknown as Teams[] );
-    });
-  
-    afterEach(() => {
-      (sinon).restore();
-    });
     it('Retornar um array de objetos contendo todos os times e enviar status 200', async () => {
+      sinon.stub(Teams, 'findAll').resolves(expectedResult as unknown as Teams[] );
       const { status, body } = await chai.request(app).get('/teams');
   
       expect(status).to.be.equal(200);
@@ -29,15 +26,8 @@ describe('Teste endpoint /teams', () => {
   });
 
   describe('Com Erro', () => { 
-    beforeEach(() => {
-      sinon.stub(TeamsService, 'getTeams').throws();
-    });
-  
-    afterEach(() => {
-      (sinon).restore();
-  
-    });
-    it('Retornar um array de objetos contendo todos os times e enviar status 200', async () => {
+    it('Retornar um objetos contendo menssage de ERRO e status 500', async () => {
+      sinon.stub(Teams, 'findAll').throws(new Error());
       const { status, body } = await chai.request(app).get('/teams');
   
       expect(status).to.be.equal(500);
@@ -48,14 +38,11 @@ describe('Teste endpoint /teams', () => {
 
 describe('Teste endpoint /teams:id', () => {
   describe('Com Sucesso', () => {
-    beforeEach(() => {
-      sinon.stub(Teams, 'findOne').resolves(expectedResultId as unknown as Teams );
-    });
-  
     afterEach(() => {
       (sinon).restore();
     });
     it('Retornar um objetos contendo o time correto e enviar status 200', async () => {
+      sinon.stub(Teams, 'findOne').resolves(expectedResultId as unknown as Teams );
       const { status, body } = await chai.request(app).get('/teams/:id');
   
       expect(status).to.be.equal(200);
@@ -64,15 +51,11 @@ describe('Teste endpoint /teams:id', () => {
   });
 
   describe('Com Erro', () => { 
-    beforeEach(() => {
-      sinon.stub(TeamsService, 'getTeamsId').throws();
-    });
-  
     afterEach(() => {
-      (TeamsService.getTeamsId as sinon.SinonStub).restore();
-  
+      sinon.restore();
     });
     it('Retornar um objetos contendo uma menssagem de erro e enviar status 500', async () => {
+      sinon.stub(Teams, 'findOne').throws(new Error());
       const { status, body } = await chai.request(app).get('/teams/:id');
   
       expect(status).to.be.equal(500);

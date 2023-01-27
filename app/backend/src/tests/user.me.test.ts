@@ -3,8 +3,8 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
-import * as UserService from '../database/services/user.service';
 import { responseLoginVaid, mockToken } from './mocks/users';
+import * as jsonwebtoken from 'jsonwebtoken';
 import User from '../database/models/Users';
 
 import { app } from '../app';
@@ -13,19 +13,18 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Teste endpoint /login/validate, com sucesso', () => {
-  beforeEach(() => {
-    sinon.stub(UserService, 'getByUserEmail').resolves(responseLoginVaid as unknown as User );
-  });
-
   afterEach(() => {
-    (UserService.getByUserEmail as sinon.SinonStub).restore();
+    sinon.restore();
   });
 
   it('Retornar um objeto contendo a role do user e enviar status 200', async () => {
-    const { status, body } = await chai.request(app).get('/login/validate').set("Authorization", mockToken.token);
+    sinon.stub(jsonwebtoken, 'verify').resolves({ email: 'admin@admin.com', password: 'secret_admin' });
+    sinon.stub(User, 'findOne').resolves(responseLoginVaid as unknown as User );
+
+    const { status, body } = await chai.request(app).get('/login/validate')
+    .set("authorization", mockToken.token);
 
     expect(status).to.be.equal(200);
-    //expect(body).to.be.an('object');
     expect(body).to.be.deep.equal(responseLoginVaid);
   });
 });

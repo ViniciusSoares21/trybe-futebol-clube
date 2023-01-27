@@ -3,24 +3,17 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
-import * as leadBoardService from '../database/services/leadBoard.service';
+import LeadBoardService from '../services/leadBoard.service';
 import { resultTeamHome, resultTeamAway, resultTeamAwayAndHome } from './mocks/leadBorad';
 import Model from '../database/models';
-import ITeams from '../database/interfaces/leaderboard'
+import ITeams from '../interfaces/leaderboard'
 import { app } from '../app';
 
 chai.use(chaiHttp);
 const { expect } = chai;
 
-/* before(() => consoleLogStub.returns(true));
-after(() => consoleLogStub.restore()); */
-
 describe('Teste endpoint GET /leaderboard/home', () => {
   describe('Com Sucesso', () => {
-    beforeEach(() => {
-     
-    });
-  
     afterEach(() => {
       (Model.query as sinon.SinonStub).restore();
     });
@@ -34,15 +27,12 @@ describe('Teste endpoint GET /leaderboard/home', () => {
   });
 
   describe('Com Erro', () => { 
-    beforeEach(() => {
-      sinon.stub(leadBoardService, 'getClassificationHome').throws();
-    });
-  
     afterEach(() => {
-      (leadBoardService.getClassificationHome as sinon.SinonStub).restore();
-  
+      sinon.restore();
     });
-    it('Retornar um objetos contendo um erro e status 500', async () => {
+
+    it('Retornar um objetos contendo um ERRO e status 500', async () => {
+      sinon.stub(Model, 'query').throws(new Error());
       const { status, body } = await chai.request(app).get('/leaderboard/home');
       const message = {
         message: "Erro interno"
@@ -55,14 +45,12 @@ describe('Teste endpoint GET /leaderboard/home', () => {
 
 describe('Teste endpoint GET /leaderboard/away', () => {
   describe('Com Sucesso', () => {
-    beforeEach(() => {
-      sinon.stub(Model, 'query').resolves([resultTeamAway, []]);
-    });
-  
     afterEach(() => {
       (Model.query as sinon.SinonStub).restore();
     });
+
     it('Retornar um array de objetos contendo todos os timesHome e enviar status 200', async () => {
+      sinon.stub(Model, 'query').resolves([resultTeamAway, []])
       const { status, body } = await chai.request(app).get('/leaderboard/away');
   
       expect(status).to.be.equal(200);
@@ -71,15 +59,12 @@ describe('Teste endpoint GET /leaderboard/away', () => {
   });
 
   describe('Com Erro', () => { 
-    beforeEach(() => {
-      sinon.stub(leadBoardService, 'getClassificationAway').throws();
-    });
-  
     afterEach(() => {
-      (leadBoardService.getClassificationAway as sinon.SinonStub).restore();
-  
+      sinon.restore();
     });
+
     it('Retornar um objetos contendo um erro e status 500', async () => {
+      sinon.stub(Model, 'query').throws(new Error());
       const { status, body } = await chai.request(app).get('/leaderboard/away');
       const message = {
         message: "Erro interno"
@@ -91,16 +76,14 @@ describe('Teste endpoint GET /leaderboard/away', () => {
 });
 
 describe('Teste endpoint GET /leaderboard', () => {
+  const service = new LeadBoardService()
   describe('Com Sucesso', () => {
-    beforeEach(() => {
-      sinon.stub(leadBoardService, 'getClassificationAway').resolves(resultTeamHome as unknown as ITeams[]);
-      sinon.stub(leadBoardService, 'getClassificationHome').resolves(resultTeamAway as unknown as ITeams[]);
-    });
-  
     afterEach(() => {
       (sinon).restore();
     });
     it('Retornar um array de objetos contendo todos os timesHome e enviar status 200', async () => {
+      sinon.stub(service, 'getClassificationAway').resolves(resultTeamHome as unknown as ITeams[]);
+      sinon.stub(service, 'getClassificationHome').resolves(resultTeamAway as unknown as ITeams[])
       const { status, body } = await chai.request(app).get('/leaderboard');
   
       expect(status).to.be.equal(200);
@@ -109,15 +92,12 @@ describe('Teste endpoint GET /leaderboard', () => {
   });
 
   describe('Com Erro', () => { 
-    beforeEach(() => {
-      sinon.stub(leadBoardService, 'getClassification').throws();
-    });
-  
     afterEach(() => {
-      (leadBoardService.getClassification as sinon.SinonStub).restore();
+      sinon.restore();
   
     });
     it('Retornar um objetos contendo um erro e status 500', async () => {
+      sinon.stub(Model, 'query').throws();
       const { status, body } = await chai.request(app).get('/leaderboard');
       const message = {
         message: "Erro interno"
