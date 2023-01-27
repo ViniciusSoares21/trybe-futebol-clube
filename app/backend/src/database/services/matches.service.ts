@@ -2,45 +2,46 @@ import { IMatches, IMatchesGoals } from '../interfaces/matches';
 import Matches from '../models/Matchers';
 import Teams from '../models/Teams';
 
-const getSeachInProgress = async (value:number) => {
-  const inProgress = await Matches.findAll({ where: { inProgress: value },
-    include: [{ model: Teams, as: 'homeTeam', attributes: { exclude: ['id'] } },
+export default class MatchesService {
+  constructor(private _MatchsModel = Matches) {}
+
+  public getSeachInProgress = async (value:number): Promise<Matches[]> => {
+    const inProgress = await this._MatchsModel.findAll({ where: { inProgress: value },
+      include: [{ model: Teams, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: Teams, as: 'awayTeam', attributes: { exclude: ['id'] } }] });
+
+    return inProgress;
+  };
+
+  public getListMatches = async (): Promise<Matches[]> => {
+    const matches = await this._MatchsModel.findAll({ include: [
+      { model: Teams, as: 'homeTeam', attributes: { exclude: ['id'] } },
       { model: Teams, as: 'awayTeam', attributes: { exclude: ['id'] } }] });
 
-  return inProgress;
-};
+    return matches;
+  };
 
-const getListMatches = async () => {
-  const matches = await Matches.findAll({ include: [
-    { model: Teams, as: 'homeTeam', attributes: { exclude: ['id'] } },
-    { model: Teams, as: 'awayTeam', attributes: { exclude: ['id'] } }] });
+  public getTeamesById = async (id:string): Promise<Matches | null> => {
+    const teame = this._MatchsModel.findOne({ where: { id } });
 
-  return matches;
-};
+    return teame;
+  };
 
-const getTeamesById = async (id:string) => {
-  const teame = Matches.findOne({ where: { id } });
+  public updateMatchesGoals = async (id:string, matches:IMatchesGoals) => {
+    await this._MatchsModel.update({ ...matches }, { where: { id } });
 
-  return teame;
-};
+    return { message: 'Update Goals' };
+  };
 
-const updateMatchesGoals = async (id:string, matches:IMatchesGoals) => {
-  await Matches.update({ ...matches }, { where: { id } });
+  public createMatches = async (matches:IMatches): Promise<Matches> => {
+    const newMatches = await this._MatchsModel.create({ ...matches, inProgress: 1 });
 
-  return { message: 'Update Goals' };
-};
+    return newMatches;
+  };
 
-const createMatches = async (matches:IMatches) => {
-  const newMatches = await Matches.create({ ...matches, inProgress: 1 });
+  public updateInProgress = async (id:string) => {
+    await this._MatchsModel.update({ inProgress: 0 }, { where: { id } });
 
-  return newMatches;
-};
-
-const updateInProgress = async (id:string) => {
-  await Matches.update({ inProgress: 0 }, { where: { id } });
-
-  return { message: 'Finished' };
-};
-
-export { getListMatches, getSeachInProgress, createMatches,
-  updateInProgress, getTeamesById, updateMatchesGoals };
+    return { message: 'Finished' };
+  };
+}

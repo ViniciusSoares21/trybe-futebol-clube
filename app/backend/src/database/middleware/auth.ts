@@ -8,7 +8,7 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
   const token = req.header('Authorization');
 
   if (!token) {
-    return res.status(401).json({ message: 'Token must be a valid token' });
+    return res.status(401).json({ message: 'token not faund' });
   }
 
   try {

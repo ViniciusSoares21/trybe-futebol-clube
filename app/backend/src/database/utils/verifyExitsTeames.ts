@@ -1,7 +1,9 @@
-import { getTeamesById } from '../services/matches.service';
+import MatchesService from '../services/matches.service';
+
+const service = new MatchesService();
 
 const veryfyExistTeams = async (ids:string[]) => {
-  const getIds = await Promise.all(ids.map((id) => getTeamesById(id)));
+  const getIds = await Promise.all(ids.map((id) => service.getTeamesById(id)));
   const verify = getIds.includes(null);
 
   return verify;

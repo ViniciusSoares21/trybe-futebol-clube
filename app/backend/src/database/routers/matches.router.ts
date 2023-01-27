@@ -1,16 +1,17 @@
 import { Router } from 'express';
-import { getSeachInProgressOrlistAll,
-  createMatches, updateInProgress, updateMatchesGoals } from '../controllers/matchers.controller';
+import MatchesController from '../controllers/matchers.controller';
 import auth from '../middleware/auth';
+
+const Controller = new MatchesController();
 
 const matchersRouter = Router();
 
-matchersRouter.get('/matches', getSeachInProgressOrlistAll);
+matchersRouter.get('/matches', Controller.getSeachInProgressOrlistAll);
 
-matchersRouter.post('/matches', auth, createMatches);
+matchersRouter.post('/matches', auth, Controller.createMatches);
 
-matchersRouter.patch('/matches/:id/finish', updateInProgress);
+matchersRouter.patch('/matches/:id/finish', Controller.updateInProgress);
 
-matchersRouter.patch('/matches/:id', updateMatchesGoals);
+matchersRouter.patch('/matches/:id', Controller.updateMatchesGoals);
 
 export default matchersRouter;

@@ -1,72 +1,74 @@
 import { Request, Response } from 'express';
-import * as MatchersService from '../services/matches.service';
+import MatchesService from '../services/matches.service';
 import veryfyExistTeams from '../utils/verifyExitsTeames';
 
 const message:object = { message: 'Erro interno' };
 
-const getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
-  try {
-    const { inProgress } = req.query;
+export default class MatchesController {
+  constructor(private _MatchsService = new MatchesService()) {}
 
-    if (!inProgress) {
-      const matches = await MatchersService.getListMatches();
+  public getSeachInProgressOrlistAll = async (req: Request, res: Response) => {
+    try {
+      const { inProgress } = req.query;
 
-      return res.status(200).json(matches);
+      if (!inProgress) {
+        const matches = await this._MatchsService.getListMatches();
+
+        return res.status(200).json(matches);
+      }
+
+      let value = 0;
+
+      if (inProgress === 'true') {
+        value = 1;
+      }
+
+      const getInProgress = await this._MatchsService.getSeachInProgress(value as number);
+
+      return res.status(200).json(getInProgress);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
     }
+  };
 
-    let value = 0;
+  public updateMatchesGoals = async (req: Request, res: Response) => {
+    try {
+      const updateGoals = await this._MatchsService.updateMatchesGoals(req.params.id, req.body);
 
-    if (inProgress === 'true') {
-      value = 1;
+      return res.status(200).json(updateGoals);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
     }
+  };
 
-    const getInProgress = await MatchersService.getSeachInProgress(value as number);
+  public createMatches = async (req: Request, res: Response) => {
+    try {
+      if (req.body.homeTeamId === req.body.awayTeamId) {
+        return res.status(422).json({
+          message: 'It is not possible to create a match with two equal teams' });
+      }
 
-    return res.status(200).json(getInProgress);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
+      const verifyTimes = await veryfyExistTeams([req.body.homeTeamId, req.body.awayTeamId]);
 
-const updateMatchesGoals = async (req: Request, res: Response) => {
-  try {
-    const updateGoals = await MatchersService.updateMatchesGoals(req.params.id, req.body);
+      if (verifyTimes) {
+        return res.status(404).json({
+          message: 'There is no team with such id!' });
+      }
+      const newMatches = await this._MatchsService.createMatches(req.body);
 
-    return res.status(200).json(updateGoals);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
-
-const createMatches = async (req: Request, res: Response) => {
-  try {
-    if (req.body.homeTeamId === req.body.awayTeamId) {
-      return res.status(422).json({
-        message: 'It is not possible to create a match with two equal teams' });
+      return res.status(201).json(newMatches);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
     }
+  };
 
-    const verifyTimes = await veryfyExistTeams([req.body.homeTeamId, req.body.awayTeamId]);
+  public updateInProgress = async (req: Request, res: Response) => {
+    try {
+      const UpInProgress = await this._MatchsService.updateInProgress(req.params.id);
 
-    if (verifyTimes) {
-      return res.status(404).json({
-        message: 'There is no team with such id!' });
+      return res.status(200).json(UpInProgress);
+    } catch (err:unknown) {
+      return res.status(500).json({ message, error: err });
     }
-    const newMatches = await MatchersService.createMatches(req.body);
-
-    return res.status(201).json(newMatches);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
-
-const updateInProgress = async (req: Request, res: Response) => {
-  try {
-    const UpInProgress = await MatchersService.updateInProgress(req.params.id);
-
-    return res.status(200).json(UpInProgress);
-  } catch (err:unknown) {
-    return res.status(500).json({ message, error: err });
-  }
-};
-
-export { getSeachInProgressOrlistAll, createMatches, updateInProgress, updateMatchesGoals };
+  };
+}
