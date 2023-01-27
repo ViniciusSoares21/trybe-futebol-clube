@@ -1,15 +1,15 @@
 import Teams from '../models/Teams';
 
-const getTeams = async () => {
-  const teams = await Teams.findAll();
+export default class TeamsService {
+  constructor(private _TeamsModel = Teams) {}
 
-  return teams;
-};
+  public getTeams = async (): Promise<Teams[]> => {
+    const teams = await this._TeamsModel.findAll();
+    return teams;
+  };
 
-const getTeamsId = async (id:string) => {
-  const teams = await Teams.findOne({ where: { id } });
-
-  return teams;
-};
-
-export { getTeams, getTeamsId };
+  public getTeamsId = async (id:string): Promise<Teams | null> => {
+    const teams = await this._TeamsModel.findOne({ where: { id } });
+    return teams;
+  };
+}
