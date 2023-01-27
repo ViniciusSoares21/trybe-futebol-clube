@@ -1,6 +1,6 @@
 import { IMatches, IMatchesGoals } from '../interfaces/matches';
-import Matches from '../models/Matchers';
-import Teams from '../models/Teams';
+import Matches from '../database/models/Matchers';
+import Teams from '../database/models/Teams';
 
 export default class MatchesService {
   constructor(private _MatchsModel = Matches) {}

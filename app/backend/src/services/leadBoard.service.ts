@@ -1,5 +1,5 @@
 import ITeams from '../interfaces/leaderboard';
-import Model from '../models';
+import Model from '../database/models';
 import { createObjetoTeams, sortObjetoTeams } from '../utils/createObjetoLeaderBoard';
 import { queryHome, queryAway } from '../utils/querys';
 
