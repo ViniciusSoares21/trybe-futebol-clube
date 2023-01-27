@@ -1,20 +1,22 @@
 import { compare } from 'bcryptjs';
 import { Request, Response } from 'express';
 
-import * as UserService from '../services/user.service';
+import UserService from '../services/user.service';
 import generateToken from '../utils/gerateToken';
+
+const service = new UserService();
 
 export default async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
-    const user = await UserService.getByUserEmail(email);
+    const user = await service.getByUserEmail(email);
 
     if (!user) {
       return res.status(401).json({ message: 'Incorrect email or password' });
     }
 
-    const passwordMatch = await compare(password, user?.dataValues.password);
+    const passwordMatch = await compare(password, user?.password);
 
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Incorrect email or password' });
