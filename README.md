@@ -85,6 +85,8 @@ Entre no diretório do back-end, abra o terminal e rode o comando
 
     npm test
     
-  
-
-
+ <br />
+ 
+## 
+ Criado por [Vinicius Soares](https://www.linkedin.com/in/vinicius-soares21/)
+    
