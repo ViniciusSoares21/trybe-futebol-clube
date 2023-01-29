@@ -45,12 +45,46 @@ O projeto Trybe Futebol Clube (TFC) é uma aplicação Full Stack que exibe info
 
 ## Execução do Projeto
 
-Clone o Projeto
+<details>
+<summary><strong>⚙️ Configurações</strong></summary>
+1.Clone o Projeto.
 
     git clone git@github.com:ViniciusSoares21/trybe-futebol-clube.git
     
-Entre no diretório do projeto
+2.Entre no diretório do projeto
 
+    cd trybe-futebol-clube
+    
+3.Instale as dependências na pasta front-end e back-end rodando o comando abaixo em cada pasta.
 
+    npm install
+
+4.<strong>Na pasta app do projeto </strong>, suba os containers app_backend, app_frontend e db. <br />
+  -   ⚠️ Para rodar a aplicação dessa forma você deve ter o [Docker](https://www.docker.com/) instalado na sua máquina.
+  
+    npm run compose:up:dev
+    
+</details>
+
+<details>
+<summary><strong>🚀 Inicialização</strong></summary>
+
+Entre na pata de fornt-end e rode o comando 
+
+    npm start
+    
+Para fazer login:
+ - Email: admin@admin.com
+ - senha: secret_admin
+
+</details>
+
+##  Execução dos testes
+
+Entre no diretório do back-end, abra o terminal e rode o comando
+
+    npm test
+    
+  
 
 
